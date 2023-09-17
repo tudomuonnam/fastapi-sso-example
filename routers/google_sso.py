@@ -38,8 +38,8 @@ async def google_login():
 
 @router.get("/callback", tags=['Google SSO'])
 async def google_callback(request: Request, db: Session = Depends(get_db)):
+    
     """Process login response from Google and return user info"""
-
     try:
         user = await google_sso.verify_and_process(request)
         user_stored = db_crud.get_user(db, user.email, provider=user.provider)
@@ -49,6 +49,7 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
                 fullname=user.display_name
             )
             user_stored = db_crud.add_user(db, user_to_add, provider=user.provider)
+        print(user, user_stored)
         access_token = create_access_token(username=user_stored.username, provider=user.provider)
         response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
         response.set_cookie(SESSION_COOKIE_NAME, access_token)
