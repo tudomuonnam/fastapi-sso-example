@@ -16,6 +16,15 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from database import get_db
 
+from fastapi import FastAPI, File, UploadFile, Request,Form
+from fastapi.responses import HTMLResponse
+
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+import shutil
+
+import pytesseract
+
 parent_directory = Path(__file__).parent
 templates_path = parent_directory / "templates"
 templates = Jinja2Templates(directory=templates_path)
@@ -73,5 +82,25 @@ def home_page(request: Request, db: Session = Depends(get_db), user: User = Depe
             status_code=500, detail=f"An unexpected error occurred. Report this message to support: {e}")
 
 
+@app.get("/upload/", response_class=HTMLResponse)
+async def upload(request: Request):
+   return templates.TemplateResponse("/itt/request.html", {"request": request})
+
+@app.post("/upload/")
+async def create_upload_file(request:Request,file: UploadFile = File(...),lang:str=Form()):
+    try:
+        with open(file.filename, 'wb') as f:
+            shutil.copyfileobj(file.file, f)
+    except Exception:
+        return {"message": "There was an error uploading the file"}
+    finally:
+        text = pytesseract.image_to_string(file.filename,lang=lang)
+        file.file.close()   
+    lines = text.splitlines()
+    return templates.TemplateResponse("/itt/response.html", {"request": request, "msg":lines})
+
+
+
+
 if __name__ == '__main__':
-    uvicorn.run(app, host="0.0.0.0", port=9999)
+    uvicorn.run("main:app", host="0.0.0.0", port=9999,reload=True)

@@ -1,0 +1,12 @@
+<div class="container mx-auto" >
+    <h1 class="text-red-700">Nội dung</h1>
+    <div class="display bg-slate-200 flex-auto" id="context">
+        {% for line in msg %}
+        <p>{{line}}</p>  
+        {% endfor %}
+    </div>
+    <div class="flex justify-center">
+     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick="copyText()" id="copyText">Copy text</button>
+     <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" onClick="window.location.reload();">Chuyển đổi ảnh mới</button>
+    </div>
+ </div>

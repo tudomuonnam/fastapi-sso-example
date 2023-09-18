@@ -1,0 +1,25 @@
+
+<div class="container mx-auto px-2 py-20">
+    <h1 class="text-center text-2xl mx-2 my-2 ">Phần mềm chuyển đổi ảnh sang chữ</h1>
+    <div class="border border-gray-600 px-5 py-5 content-around h-50">
+        <form action="/upload" method="POST" enctype="multipart/form-data" id="form1">
+
+            <label class="block mb-2 text-sm font-medium text-black-900 dark:text-white" for="file_input">Chọn file cần chuyển đổi</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file" type="file" name="file">
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
+
+            <label for="lang">Lựa chọn ngôn ngữ trong ảnh:</label>
+            <select id="lang" name="lang">
+                <option value="vie">Tiếng Việt</option>
+                <option value="eng">Tiếng Anh</option>
+                <option value="chn">Tiếng Trung</option>
+                <option value="jpn">Tiếng Nhật</option>
+                <option value="kor">Tiếng Hàn</option>
+            </select>
+            <div id="display1" class="border-white-600 border-l-2 p-2"></div>
+            <div id="display2" class="border-white-600 border-l-2 p-2"></div>
+            <button id="file-submit"  type="submit" class="btn text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed" disabled>Upload File</button>
+        </form>
+        
+    </div>
+</div>

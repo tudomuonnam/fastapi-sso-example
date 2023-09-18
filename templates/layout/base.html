@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="style.css" />
+    <title>{% block title %}{% endblock %} - My Webpage</title>
+    {% endblock %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+        theme: {
+            extend: {
+            colors: {
+            }
+            }
+        }
+        }
+    </script>
+</head>
+<body>
+    <div id="header">{% include "/layout/nav.html" %}</div>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">{% include "/layout/footer.html" %}</div>
+</body>
+{% block script %} {% endblock %}
+</html>
