@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     {% block head %}
-    <link rel="stylesheet" href="style.css" />
+    {#  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">  #}
     <title>{% block title %}{% endblock %} - My Webpage</title>
     {% endblock %}
     <script src="https://cdn.tailwindcss.com"></script>

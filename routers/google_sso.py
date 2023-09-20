@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Cookie
 from fastapi.responses import RedirectResponse
 from database_crud import users_db_crud as db_crud
 from schemas import UserSignUp
@@ -10,7 +10,7 @@ from authentication import create_access_token, SESSION_COOKIE_NAME
 from dotenv import load_dotenv
 from pathlib import Path
 import os
-
+from typing import Union
 
 directory_path = Path(__file__).parent
 env_file_path = directory_path.parent / '.env'
@@ -32,13 +32,22 @@ router = APIRouter(prefix="/v1/google")
 
 
 @router.get("/login", tags=['Google SSO'])
-async def google_login():
+async def google_login(request: Request):
+    # Store the previous link in the user's session
+    previous_link = request.headers.get("referer")#referer
+    if previous_link is None:
+        previous_link = '/'
+    request.session["previous_link"] = previous_link
+    #previous_link = request.session.get('previous_link')
+    print(previous_link)
     return await google_sso.get_login_redirect(params={"prompt": "consent", "access_type": "offline"})
 
 
 @router.get("/callback", tags=['Google SSO'])
 async def google_callback(request: Request, db: Session = Depends(get_db)):
-    
+    # Get previous url
+    previous_url = request.session.get('previous_link')
+    print(previous_url)
     """Process login response from Google and return user info"""
     try:
         user = await google_sso.verify_and_process(request)
@@ -50,7 +59,7 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
             )
             user_stored = db_crud.add_user(db, user_to_add, provider=user.provider)
         access_token = create_access_token(username=user_stored.username, provider=user.provider)
-        response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+        response = RedirectResponse(url=previous_url, status_code=status.HTTP_302_FOUND)
         response.set_cookie(SESSION_COOKIE_NAME, access_token)
         return response
     except db_crud.DuplicateError as e:

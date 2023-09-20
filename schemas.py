@@ -27,3 +27,9 @@ class Token(BaseModel):
 class UserStat(BaseModel):
     provider: str
     count: int
+
+class AccessLog(BaseModel):
+    ip: str
+    count_daily: int
+    last_access: datetime
+    first_access: Optional[datetime]

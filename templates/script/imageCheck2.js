@@ -1,0 +1,1 @@
+window.alert("You're in danger");

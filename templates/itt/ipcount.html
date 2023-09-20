@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rate Limiting</title>
+</head>
+<body>
+    <form action="/" method="POST">
+        <input type="text" name="ip" placeholder="Nhập địa chỉ IP">
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if ip %}
+        <h2>Số lần request trong ngày: {{ count }}</h2>
+    {% endif %}
+</body>
+</html>
