@@ -32,5 +32,6 @@ async def create_upload_file(request:Request,file: UploadFile = File(...),lang:s
     finally:
         text = pytesseract.image_to_string(file.filename,lang=lang)
         file.file.close()   
+   # text = "Upload upload"
     lines = text.splitlines()
     return templates.TemplateResponse("/itt/response.html", {"request": request, "msg":lines})

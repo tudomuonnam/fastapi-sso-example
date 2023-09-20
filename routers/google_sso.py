@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Cookie
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, Response
 from database_crud import users_db_crud as db_crud
 from schemas import UserSignUp
 from sqlalchemy.orm import Session
@@ -30,15 +30,18 @@ google_sso = GoogleSSO(
 
 router = APIRouter(prefix="/v1/google")
 
+#previous_link = ''
 
 @router.get("/login", tags=['Google SSO'])
-async def google_login(request: Request):
+async def google_login(request: Request,response: Response):
     # Store the previous link in the user's session
     previous_link = request.headers.get("referer")#referer
     if previous_link is None:
         previous_link = '/'
+    #response.set_cookie(key="previous_link", value=previous_link,max_age=120)
     request.session["previous_link"] = previous_link
-    #previous_link = request.session.get('previous_link')
+    print(previous_link)
+    previous_link = request.session.get('previous_link')
     print(previous_link)
     return await google_sso.get_login_redirect(params={"prompt": "consent", "access_type": "offline"})
 
@@ -46,8 +49,7 @@ async def google_login(request: Request):
 @router.get("/callback", tags=['Google SSO'])
 async def google_callback(request: Request, db: Session = Depends(get_db)):
     # Get previous url
-    previous_url = request.session.get('previous_link')
-    print(previous_url)
+    previous_link = request.session.get('previous_link')
     """Process login response from Google and return user info"""
     try:
         user = await google_sso.verify_and_process(request)
@@ -59,7 +61,7 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
             )
             user_stored = db_crud.add_user(db, user_to_add, provider=user.provider)
         access_token = create_access_token(username=user_stored.username, provider=user.provider)
-        response = RedirectResponse(url=previous_url, status_code=status.HTTP_302_FOUND)
+        response = RedirectResponse(url=previous_link, status_code=status.HTTP_302_FOUND)
         response.set_cookie(SESSION_COOKIE_NAME, access_token)
         return response
     except db_crud.DuplicateError as e:

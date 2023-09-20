@@ -2,7 +2,8 @@
     <h1 class="text-red-700">Nội dung</h1>
     <div class="flex justify-center">
         <button class="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded" onClick="copyText()" id="copyText">Copy text</button>
-        <button class="bg-yellow-500 hover:bg-yellow-800 text-white font-bold py-2 px-4 rounded" onClick="window.location.reload();">Chuyển đổi ảnh mới</button>
+        <button class="bg-orange-500 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded" onClick="downloadFile();">Lưu về máy</button>
+        <button class="bg-yellow-500 hover:bg-yellow-800 text-white font-bold py-2 px-4 rounded" onClick="window.location=window.location;">Chuyển đổi ảnh mới</button>
        </div>
     <div class="display bg-slate-300 flex-auto" id="context">
         {% for line in msg %}
@@ -11,6 +12,7 @@
     </div>
     <div class="flex flex-auto justify-center px-3 py-3">
      <button class="bg-blue-500 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded" onClick="copyText()" id="copyText">Copy text</button>
-     <button class="bg-yellow-500 hover:bg-yellow-800 text-white font-bold py-2 px-4 rounded" onClick="window.location.reload();">Chuyển đổi ảnh mới</button>
+     <button class="bg-orange-500 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded" onClick="downloadFile();">Lưu về máy</button>
+     <button class="bg-yellow-500 hover:bg-yellow-800 text-white font-bold py-2 px-4 rounded" onClick="window.location=window.location;">Chuyển đổi ảnh mới</button>
     </div>
  </div>

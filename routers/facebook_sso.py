@@ -32,13 +32,23 @@ router = APIRouter(prefix="/v1/facebook")
 
 
 @router.get("/login", tags=['Facebook SSO'])
-async def facebook_login():
+async def facebook_login(request: Request):
+    # Store the previous link in the user's session
+    previous_link = request.headers.get("referer")#referer
+    if previous_link is None:
+        previous_link = '/'
+    #response.set_cookie(key="previous_link", value=previous_link,max_age=120)
+    request.session["previous_link"] = previous_link
+
     with facebook_sso:
         return await facebook_sso.get_login_redirect()
 
 
 @router.get("/callback", tags=['Facebook SSO'])
 async def facebook_callback(request: Request, db: Session = Depends(get_db)):
+    # Get previous url
+    previous_link = request.session.get('previous_link')
+
     """Process login response from Facebook and return user info"""
 
     try:
@@ -53,7 +63,7 @@ async def facebook_callback(request: Request, db: Session = Depends(get_db)):
             )
             user_stored = db_crud.add_user(db, user_to_add, provider=user.provider)
         access_token = create_access_token(username=user_stored.username, provider=user.provider)
-        response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+        response = RedirectResponse(url=previous_linkg, status_code=status.HTTP_302_FOUND)
         response.set_cookie(SESSION_COOKIE_NAME, access_token)
         return response
     except db_crud.DuplicateError as e:
