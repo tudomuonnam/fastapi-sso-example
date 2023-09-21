@@ -6,6 +6,11 @@
         .important { color: #336699; }
     </style>
 {% endblock %}
+
+{% block nav %}
+    {% include '/layout/nav.html' %}
+{% endblock %}
+
 {% block content %}
     {% include '/itt/form.html' %}
     

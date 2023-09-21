@@ -19,7 +19,7 @@
     </script>
 </head>
 <body>
-    <div id="header">{% include "/layout/nav.html" %}</div>
+    <div id="header">{% block nav %}{% endblock %}</div>
     <div id="content">{% block content %}{% endblock %}</div>
     <div id="footer">{% include "/layout/footer.html" %}</div>
 </body>

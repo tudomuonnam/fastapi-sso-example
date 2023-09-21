@@ -1,14 +1,19 @@
-from fastapi import Depends, APIRouter, HTTPException, Form, status
-from fastapi.responses import RedirectResponse
+from fastapi import Depends, APIRouter, HTTPException, Form, status, Request
+from fastapi.responses import RedirectResponse, HTMLResponse
 from sqlalchemy.orm import Session
 from authentication import create_access_token, authenticate_user, SESSION_COOKIE_NAME
 from database import get_db
 from database_crud import users_db_crud as db_crud
 from schemas import User, UserSignUp
 
+from authentication import get_current_user
+from api.template import templates
+
 
 router = APIRouter(prefix="/v1")
-
+@router.get("/login",response_class=HTMLResponse)
+def login_user(request: Request,user: User = Depends(get_current_user)):
+    return templates.TemplateResponse("/auth/request.html",{"request": request, "user": user})
 
 @router.post("/sign_up", response_model=User, summary="Register a user", tags=["Auth"])
 def create_user(user_signup: UserSignUp, db: Session = Depends(get_db)):

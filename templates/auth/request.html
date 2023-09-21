@@ -1,19 +1,17 @@
 {% extends "/layout/base.html" %}
+
 {% block title %}Index{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
-
 {% block nav %}
     {% include '/layout/nav.html' %}
 {% endblock %}
-
 {% block content %}
-    {% include '/itt/result.html' %}
+    {% include '/auth/login.html' %}
 {% endblock %}
-
 {% block script %}
     <script type="text/javascript">
-        {% include '/script/response.js' %}
+        {% include '/script/user.js' %}
     </script>
 {% endblock %}

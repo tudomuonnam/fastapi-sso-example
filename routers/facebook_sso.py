@@ -63,7 +63,7 @@ async def facebook_callback(request: Request, db: Session = Depends(get_db)):
             )
             user_stored = db_crud.add_user(db, user_to_add, provider=user.provider)
         access_token = create_access_token(username=user_stored.username, provider=user.provider)
-        response = RedirectResponse(url=previous_linkg, status_code=status.HTTP_302_FOUND)
+        response = RedirectResponse(url=previous_link, status_code=status.HTTP_302_FOUND)
         response.set_cookie(SESSION_COOKIE_NAME, access_token)
         return response
     except db_crud.DuplicateError as e:
